@@ -1,7 +1,12 @@
 # scala
 
-This project contains my solution for 2 problems. I have uploaded both as individual projects so that they can be run independently. Both project contains test cases that has been written using scala-test framework. 
+This project contains my solution for this assignment. 
 
-Best way to run the project is to import it in Intellij and let it handle all the dependencies. 
+I have uploaded solution to both the problems as individual projects so that they can be run independently. Both projects contain different test cases as well that has been written using scala-test framework. 
 
-Both projects has Main.scala file which will print out expected output based on the input test given in the assignment. Extra test cases resides in src/test/scala/Test.scala
+Best way to run these projects is to import each independently in Intellij and let it handle all the dependencies. 
+
+Both projects has Main.scala file which, when executed, will print out expected output based on the given test data. 
+Extra test cases resides in src/test/scala/Test.scala
+
+
