@@ -12,6 +12,8 @@ object Main extends App  {
       CabinPrice("CB", "S1", 245.00),
       CabinPrice("CB", "S2", 270.00))))
 
+  def min(c1: CabinPrice, c2: CabinPrice): CabinPrice = if (c1.price > c2.price) c2 else c1
+
   def getBestGroupPrices(rates: Seq[Rate],
                          prices: Seq[CabinPrice]): Seq[BestGroupPrice] = {
 
@@ -21,22 +23,17 @@ object Main extends App  {
     val groupedPrices = prices.groupBy(p => (p.cabinCode))
     val results = groupedPrices.map { case(k, v) =>
       //first group the rate
-
-      val foundMin = groupedRates.map { case(rk, rv) =>
-        // println(rk)
-        var min = ("cabinCode", "rateCode", BigDecimal(99999.00), "rateGroup")
-        rv.foreach {it =>
-          //we can now find min
-          val possibleMin = v.filter(_.rateCode == it.rateCode)
-          min = if(possibleMin.length > 0 && min._3 > possibleMin(0).price) (possibleMin(0).cabinCode, it.rateCode, possibleMin(0).price, it.rateGroup ) else (min._1, min._2, min._3, min._4)
-        }
-        //if(min._1 != "cabinCode")
-          (min)
+      val foundMin = groupedRates.collect { case(rk, rv) =>
+        val matchingCabins = v.filter{ x=> (rv.collect{case(a) => a.rateCode}).contains(x.rateCode)}
+        if(!matchingCabins.isEmpty) {
+          val thisMin = matchingCabins.reduceLeft(min)
+          BestGroupPrice(thisMin.cabinCode, thisMin.rateCode, thisMin.price, rk)
+        }else BestGroupPrice("junk", "junk", 0.0, "junk")
       }
       foundMin
     }
 
-    results.flatten.filter {x => x._1 != ("cabinCode")}.map{x => BestGroupPrice(x._1, x._2, x._3, x._4)}.toSeq
+    results.flatten.filter{_.cabinCode != "junk"}.toSeq
   }
 }
 
